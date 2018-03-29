@@ -82,13 +82,13 @@ def send_voice():
         except:
             pass
 
-threading._start_new_thread(receive_voice, ())
+#threading._start_new_thread(receive_voice, ())
 threading._start_new_thread(send_voice, ())
 
 tmp = 0
-while True:
-    tmp = 0
-
+#while True:
+#    tmp = 0
+receive_voice()
 
 #data2='a'
 #data = 'a'
