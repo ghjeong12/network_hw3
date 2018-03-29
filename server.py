@@ -6,6 +6,7 @@ import pyaudio
 import wave
 import time
 import threading
+import sys
 
 HOST = '141.223.207.215'    #HOST ip address should be set by the user.
 PORT = 23456                #PORT should be set by the user.
@@ -19,7 +20,7 @@ print("[PROGRAM] WAITING FOR CLIENT CONNECTION")
 
 conn, addr = s.accept()
 conn_c, addr_c = s.accept()
-s.setblocking(0)
+#s.setblocking(0)
 print ("[PROGRAM] CONNECTION COMPLETED")
 
 # Functions for text chatting
@@ -27,21 +28,27 @@ print ("[PROGRAM] CONNECTION COMPLETED")
 def send_txt():
     while True:
         text_data = input()
+        if text_data == "quit":
+            print("hi")
+            sys.exit()
         text_data = text_data.encode("utf-8")
         conn_c.send(text_data)
     conn_c.close()
 
 def receive_txt():
     while True:
-        text_data = conn_c.recv(1024)
-        if not text_data:
-            break
+        try:
+            text_data = conn_c.recv(1024)
+            if not text_data:
+                break
 
-        else:
-            # default setting puts b' in the beginning of the text.
-            text_len = len(str(text_data))
-            text_data = str(text_data)[2:text_len-1]
-            print (text_data)
+            else:
+                # default setting puts b' in the beginning of the text.
+                text_len = len(str(text_data))
+                text_data = str(text_data)[2:text_len-1]
+                print (text_data)
+        except KeyboardInterrupt:
+            exit()
     conn_c.close()
 
 threading._start_new_thread(send_txt, ())
@@ -78,6 +85,8 @@ def receive_voice():
         try:
             voice_receive_data = conn.recv(1024)
             stream.write(voice_receive_data)
+        except KeyboardInterrupt:
+            exit()
         except:
             pass
     conn.close()

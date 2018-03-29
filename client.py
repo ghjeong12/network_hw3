@@ -1,9 +1,11 @@
+# POSTECH 2018 Spring CSED353 Assignment 3
+# made by Jeong, Geonhwa / Kim, Junyoung
+
 import socket
 import pyaudio
 import wave
 import threading
 
-#HOST = '141.223.206.86'    # The remote host
 HOST = '141.223.207.215'    #HOST ip address should be set by the user.
 PORT = 23456                #PORT should be set by the user.
 
@@ -12,7 +14,8 @@ s.connect((HOST, PORT))
 socket_chat = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socket_chat.connect((HOST, PORT))
 
-s.setblocking(0)
+#s.setblocking(0)
+s.settimeout(1)
 print("[PROGRAM] CONNECTION COMPLETED")
 
 ##### Text chatting function #####
@@ -68,7 +71,7 @@ def receive_voice():
             voice_receive_data = s.recv(1024)
             stream2.write(voice_receive_data)
         except:
-            pass
+            exit()
 
 def send_voice():
     voice_send_data = ' '
