@@ -97,9 +97,10 @@ threading._start_new_thread(receive_voice, ())
 threading._start_new_thread(send_voice, ())
 
 # Dummy code to not terminate this program
-tmp = 0;
+tmp = 0
 while True:
-    tmp = 0;
+    tmp = 0
+
 #while data != '':
 #    try:			# receiving data
 #        data = conn.recv(1024)

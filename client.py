@@ -82,12 +82,12 @@ def send_voice():
         except:
             pass
 
-threading._start_new_thread(recieve_voice, ())
+threading._start_new_thread(receive_voice, ())
 threading._strat_new_thread(send_voice, ())
 
-tmp = 0;
+tmp = 0
 while True:
-    tmp = 0;
+    tmp = 0
 
 
 #data2='a'
