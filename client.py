@@ -12,9 +12,8 @@ RATE = 20000
 
 #HOST = '127.0.0.1'
 #HOST = '141.223.206.86'    # The remote host
-HOST = '141.223.204.146'
-PORT = 50007              # The same port as used by the server
-PORT_CHAT = 33333
+HOST = '141.223.207.215'    #HOST ip address should be set by the user.
+PORT = 23456                #PORT should be set by the user.
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((HOST, PORT))
 socket_chat = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

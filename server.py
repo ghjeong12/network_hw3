@@ -1,4 +1,4 @@
-# 2018 Spring CSED353 Assignment 3
+# POSTECH 2018 Spring CSED353 Assignment 3
 # made by Jeong, Geonhwa / Kim, Junyoung
 
 import socket
@@ -56,7 +56,6 @@ RECORD_SECONDS = 4000
 
 p = pyaudio.PyAudio()
 
-# for receiving data
 stream = p.open(format=FORMAT,
                 channels=CHANNELS,
                 rate=RATE,
@@ -64,7 +63,6 @@ stream = p.open(format=FORMAT,
 		output_device_index=1,
                 frames_per_buffer=CHUNK)
 
-# for sending data
 stream2 = p.open(format=FORMAT,
                  channels=CHANNELS,
                  rate=RATE,
@@ -77,30 +75,20 @@ stream2 = p.open(format=FORMAT,
 data=' '
 i=0
 while data != '':
-    # print ("i: %d "%i)
-    # i = i + 1
     try:			# receiving data
-        # print ("Trying Recieving")
         data = conn.recv(1024)
-        # print ("Trying Writing")
         stream.write(data)
-        # print ("Recieving Done")
     except KeyboardInterrupt:
      	break
     except:
-        # print ("pass1")
         pass
 
     try:		# sending data
-        # print ("Trying Reading")
         data2  = stream2.read(CHUNK)
-        # print ("Trying Sending")
         conn.sendall(data2)
-        # print ("Reading Done")
     except KeyboardInterrupt:
      	break
     except:
-        # print ("pass2")
         pass
 
 stream.stop_stream()
