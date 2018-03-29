@@ -38,7 +38,7 @@ def receive_txt():
             break
 
         else:
-            #data = str(text_data).split("b'", 1)[1].rsplit("'", 1)[0]
+            # default setting puts b' in the beginning of the text.
             text_len = len(str(text_data))
             text_data = str(text_data)[2:text_len-1]
             print (text_data)
@@ -53,7 +53,6 @@ CHUNK = 512
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 20000
-RECORD_SECONDS = 4000
 
 p = pyaudio.PyAudio()
 

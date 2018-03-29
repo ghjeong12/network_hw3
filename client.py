@@ -3,12 +3,6 @@ import pyaudio
 import wave
 import threading
 
-CHUNK = 512
-FORMAT = pyaudio.paInt16
-CHANNELS = 1
-RATE = 20000
-#RECORD_SECONDS = 4000
-
 #HOST = '141.223.206.86'    # The remote host
 HOST = '141.223.207.215'    #HOST ip address should be set by the user.
 PORT = 23456                #PORT should be set by the user.
@@ -41,13 +35,16 @@ def receive_txt():
 threading._start_new_thread(send_txt, ())
 threading._start_new_thread(receive_txt, ())
 
+CHUNK = 512
+FORMAT = pyaudio.paInt16
+CHANNELS = 1
+RATE = 20000
 
 p = pyaudio.PyAudio()
 p2 = pyaudio.PyAudio()
 
-
 # for sending data
-stream = p2.open(format=FORMAT,
+stream = p.open(format=FORMAT,
                 channels=CHANNELS,
                 rate=RATE,
                 input=True,
