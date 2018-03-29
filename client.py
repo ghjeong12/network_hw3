@@ -3,51 +3,44 @@ import pyaudio
 import wave
 import threading
 
-#record
 CHUNK = 512
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 20000
 #RECORD_SECONDS = 4000
 
-#HOST = '127.0.0.1'
 #HOST = '141.223.206.86'    # The remote host
 HOST = '141.223.207.215'    #HOST ip address should be set by the user.
 PORT = 23456                #PORT should be set by the user.
+
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((HOST, PORT))
 socket_chat = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socket_chat.connect((HOST, PORT))
 
-#socket_chat = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#socket_chat.connect((HOST, PORT_CHAT))
-
 s.setblocking(0)
-#connection setup done and connected to server
+print("[PROGRAM] CONNECTION COMPLETED]")
 
 ##### Text chatting function #####
-def sendMsg():
+def send_txt():
     while True:
-        data_text = input()
-        #data_text = bytes(data_text, "utf-8")
-        data_text = data_text.encode("utf-8")
-        #s.send(data_text)
-        socket_chat.send(data_text)
+        text_data = input()
+        text_data = text_data.encode("utf-8")
+        socket_chat.send(text_data)
     socket_chat.close()
-    #s.close()
 
-def getMsg():
+def receive_txt():
     while True:
-        data_text = socket_chat.recv(1024)
-        #data_text = s.recv(1024)
-        print(data_text)
-        data_text = str(data_text).split("b'", 1)[1].rsplit("'",1)[0]
-        print(data_text)
+        text_data = socket_chat.recv(1024)
+        text_len = len(str(text_data))
+        #data_text = str(data_text).split("b'", 1)[1].rsplit("'",1)[0]
+        text_data = str(text_data)[2:text_len-1]
+        print(text_data)
     socket_chat.close()
-    #s.close()
-#### end def
-threading._start_new_thread(sendMsg, ())
-threading._start_new_thread(getMsg, ())
+
+threading._start_new_thread(send_txt, ())
+threading._start_new_thread(receive_txt, ())
+
 
 p = pyaudio.PyAudio()
 p2 = pyaudio.PyAudio()
@@ -70,9 +63,9 @@ stream2 = p.open(format=FORMAT,
                 #output_device_index=1,
                 frames_per_buffer=CHUNK)
 
-
-
-print("*recording")
+# Functions for voice chatting
+def receive_voice():
+    voice_receive_data = ' '
 
 data2='a'
 data = 'a'

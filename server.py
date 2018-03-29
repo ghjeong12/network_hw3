@@ -38,8 +38,9 @@ def receive_txt():
             break
 
         else:
-            print (text_data)
-            data = str(text_data).split("b'", 1)[1].rsplit("'", 1)[0]
+            #data = str(text_data).split("b'", 1)[1].rsplit("'", 1)[0]
+            text_len = len(str(text_data))
+            text_data = str(text_data)[2:text_len-1]
             print (text_data)
     conn_c.close()
 
@@ -60,41 +61,66 @@ stream = p.open(format=FORMAT,
                 channels=CHANNELS,
                 rate=RATE,
                 output=True,
-		output_device_index=1,
+		#output_device_index=1,
                 frames_per_buffer=CHUNK)
 
 stream2 = p.open(format=FORMAT,
                  channels=CHANNELS,
                  rate=RATE,
                  input=True,
-		 input_device_index=0,
+		 #input_device_index=0,
                  frames_per_buffer=CHUNK)
 
 
 
-data=' '
-i=0
-while data != '':
-    try:			# receiving data
-        data = conn.recv(1024)
-        stream.write(data)
-    except KeyboardInterrupt:
-     	break
-    except:
-        pass
+def receive_voice():
+    voice_receive_data = ' '
+    while True:
+        try:
+            voice_receive_data = conn.recv(1024)
+            stream.write(voice_receive_data)
+        except:
+            pass
+    conn.close()
 
-    try:		# sending data
-        data2  = stream2.read(CHUNK)
-        conn.sendall(data2)
-    except KeyboardInterrupt:
-     	break
-    except:
-        pass
+def send_voice():
+    voice_send_data = ' '
+    while True:
+        try:
+            voice_send_data = stream2.read(CHUNK)
+            conn.sendall(voice_send_data)
+        except:
+            pass
+    conn.close()
 
-stream.stop_stream()
-stream.close()
-stream2.stop_stream()
-stream2.close()
-p.terminate()
-conn.close()
-conn_c.close()
+threading._start_new_thread(receive_voice, ())
+threading._start_new_thread(send_voice, ())
+
+# Dummy code to not terminate this program
+tmp = 0;
+while True:
+    tmp = 0;
+#while data != '':
+#    try:			# receiving data
+#        data = conn.recv(1024)
+#        stream.write(data)
+#    except KeyboardInterrupt:
+#     	break
+#    except:
+#        pass
+
+#    try:		# sending data
+#        data2  = stream2.read(CHUNK)
+#        conn.sendall(data2)
+#    except KeyboardInterrupt:
+#     	break
+#    except:
+#        pass
+
+#stream.stop_stream()
+#stream.close()
+#stream2.stop_stream()
+#stream2.close()
+#p.terminate()
+#conn.close()
+#conn_c.close()
