@@ -1,5 +1,6 @@
-import pyaudio
+# This test is checking input/output devices of your computer
 
+import pyaudio
 po = pyaudio.PyAudio()
 
 for index in range(po.get_device_count()):
