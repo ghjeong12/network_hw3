@@ -83,7 +83,7 @@ def send_voice():
             pass
 
 threading._start_new_thread(receive_voice, ())
-threading._strat_new_thread(send_voice, ())
+threading._start_new_thread(send_voice, ())
 
 tmp = 0
 while True:
