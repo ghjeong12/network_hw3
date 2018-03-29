@@ -3,60 +3,60 @@
 
 import socket
 import pyaudio
-import wave
 import threading
 
 HOST = '141.223.207.215'    #HOST ip address should be set by the user.
 PORT = 23456                #PORT should be set by the user.
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.connect((HOST, PORT))
+sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sock.connect((HOST, PORT))
 socket_chat = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socket_chat.connect((HOST, PORT))
 
-#s.setblocking(0)
-s.settimeout(1)
+sock.settimeout(1)
 print("[PROGRAM] CONNECTION COMPLETED")
 
-##### Text chatting function #####
+# Functions for text chatting
+
 def send_txt():
     while True:
-        text_data = input()
-        text_data = text_data.encode("utf-8")
-        socket_chat.send(text_data)
-    socket_chat.close()
+        try:
+            text_data = input()
+            text_data = text_data.encode("utf-8")
+            socket_chat.send(text_data)
+        except:
+            exit()
 
 def receive_txt():
     while True:
-        text_data = socket_chat.recv(1024)
-        text_len = len(str(text_data))
-        #data_text = str(data_text).split("b'", 1)[1].rsplit("'",1)[0]
-        text_data = str(text_data)[2:text_len-1]
-        print(text_data)
-    socket_chat.close()
+        try:
+            text_data = socket_chat.recv(1024)
+            text_len = len(str(text_data))
+            text_data = str(text_data)[2:text_len-1]
+            print(text_data)
+        except:
+            exit()
 
 threading._start_new_thread(send_txt, ())
 threading._start_new_thread(receive_txt, ())
+
+# Configuration for pyaudio
 
 CHUNK = 512
 FORMAT = pyaudio.paInt16
 CHANNELS = 1
 RATE = 20000
 
-p = pyaudio.PyAudio()
-p2 = pyaudio.PyAudio()
+pyaudio_obj = pyaudio.PyAudio()
 
-# for sending data
-stream = p.open(format=FORMAT,
+snd_stream = pyaudio_obj.open(format=FORMAT,
                 channels=CHANNELS,
                 rate=RATE,
                 input=True,
                 #input_device_index=0,
                 frames_per_buffer=CHUNK)
 
-
-# for receiving data
-stream2 = p.open(format=FORMAT,
+rcv_stream = pyaudio_obj.open(format=FORMAT,
                 channels=CHANNELS,
                 rate=RATE,
                 output=True,
@@ -68,59 +68,41 @@ def receive_voice():
     voice_receive_data = ' '
     while True:
         try:
-            voice_receive_data = s.recv(1024)
-            stream2.write(voice_receive_data)
+            voice_receive_data = sock.recv(1024)
+            rcv_stream.write(voice_receive_data)
+        except KeyboardInterrupt:
+            rcv_stream.stop_stream()
+            rcv_stream.close()
+            snd_stream.stop_stream()
+            snd_stream.close()
+            pyaudio_obj.terminate()
+            sock.close()
+            socket_chat.close()
+            print("[PROGRAM] SYSTEM TERMINATED")
+            exit()
         except:
+            rcv_stream.stop_stream()
+            rcv_stream.close()
+            snd_stream.stop_stream()
+            snd_stream.close()
+            pyaudio_obj.terminate()
+            sock.close()
+            socket_chat.close()
+            print("[PROGRAM] SYSTEM TERMINATED")
             exit()
 
 def send_voice():
     voice_send_data = ' '
     while True:
         try:
-            voice_send_data = stream.read(CHUNK)
-            s.sendall(voice_send_data)
+            voice_send_data = snd_stream.read(CHUNK)
+            sock.sendall(voice_send_data)
         except:
             pass
 
-#threading._start_new_thread(receive_voice, ())
 threading._start_new_thread(send_voice, ())
 
-tmp = 0
-#while True:
-#    tmp = 0
+# Main process will receive voice data
 receive_voice()
 
-#data2='a'
-#data = 'a'
-
-#i=0
-#while data2 != '':
-
-# try:		# sending data
-#     data  = stream.read(CHUNK)
-#     s.sendall(data)
-# except KeyboardInterrupt:
-#     break
-# except :
-#     pass
-
-# try:       	# receiving data
-#     data2 = s.recv(1024)
-#     stream2.write(data2)
-# except KeyboardInterrupt:
-#     break
-# except:
-#     #print ("receive except")
-#     pass
-
-#print("*done recording")
-
-
-#stream.stop_stream()
-#stream.close()
-#stream2.stop_stream()
-#stream2.close()
-#p.terminate()
-#s.close()
-#socket_chat.close()
 print("[PROGRAM] CONNECTION CLOSED")
