@@ -93,13 +93,14 @@ def send_voice():
             pass
     conn.close()
 
-threading._start_new_thread(receive_voice, ())
+#threading._start_new_thread(receive_voice, ())
 threading._start_new_thread(send_voice, ())
 
 # Dummy code to not terminate this program
-tmp = 0
-while True:
-    tmp = 0
+receive_voice()
+#tmp = 0
+#while True:
+#    tmp = 0
 
 print("[PROGRAM] CONNECTION CLOSED")
 
