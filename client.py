@@ -66,41 +66,61 @@ stream2 = p.open(format=FORMAT,
 # Functions for voice chatting
 def receive_voice():
     voice_receive_data = ' '
+    while True:
+        try:
+            voice_receive_data = s.recv(1024)
+            stream2.write(voice_receive_data)
+        except:
+            pass
 
-data2='a'
-data = 'a'
+def send_voice():
+    voice_send_data = ' '
+    while True:
+        try:
+            voice_send_data = stream.read(CHUNK)
+            s.sendall(voice_send_data)
+        except:
+            pass
 
-i=0
-while data2 != '':
+threading._start_new_thread(recieve_voice, ())
+threading._strat_new_thread(send_voice, ())
 
- try:		# sending data
-     data  = stream.read(CHUNK)
-     s.sendall(data)
- except KeyboardInterrupt:
-     break
- except :
-     pass
-
- try:       	# receiving data
-     data2 = s.recv(1024)
-     stream2.write(data2)
- except KeyboardInterrupt:
-     break
- except:
-     #print ("receive except")
-     pass
-
-print("*done recording")
+tmp = 0;
+while True:
+    tmp = 0;
 
 
+#data2='a'
+#data = 'a'
+
+#i=0
+#while data2 != '':
+
+# try:		# sending data
+#     data  = stream.read(CHUNK)
+#     s.sendall(data)
+# except KeyboardInterrupt:
+#     break
+# except :
+#     pass
+
+# try:       	# receiving data
+#     data2 = s.recv(1024)
+#     stream2.write(data2)
+# except KeyboardInterrupt:
+#     break
+# except:
+#     #print ("receive except")
+#     pass
+
+#print("*done recording")
 
 
-
-stream.stop_stream()
-stream.close()
-stream2.stop_stream()
-stream2.close()
-p.terminate()
+#stream.stop_stream()
+#stream.close()
+#stream2.stop_stream()
+#stream2.close()
+#p.terminate()
 s.close()
-socket_chat.close()
+#socket_chat.close()
 print("[SYSTEM] Connections closed")
