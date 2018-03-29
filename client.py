@@ -19,7 +19,7 @@ socket_chat = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 socket_chat.connect((HOST, PORT))
 
 s.setblocking(0)
-print("[PROGRAM] CONNECTION COMPLETED]")
+print("[PROGRAM] CONNECTION COMPLETED")
 
 ##### Text chatting function #####
 def send_txt():
@@ -121,6 +121,6 @@ while True:
 #stream2.stop_stream()
 #stream2.close()
 #p.terminate()
-s.close()
+#s.close()
 #socket_chat.close()
-print("[SYSTEM] Connections closed")
+print("[PROGRAM] CONNECTION CLOSED")

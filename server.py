@@ -13,7 +13,7 @@ PORT = 23456                #PORT should be set by the user.
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((HOST, PORT))
 s.listen(1)
-
+print("[PROGRAM] WAITING FOR CLIENT CONNECTION")
 # The socket will accept twice so that it can handle
 # text chatting and voice chatting simultaneously.
 
@@ -100,6 +100,8 @@ threading._start_new_thread(send_voice, ())
 tmp = 0
 while True:
     tmp = 0
+
+print("[PROGRAM] CONNECTION CLOSED")
 
 #while data != '':
 #    try:			# receiving data
