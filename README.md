@@ -9,4 +9,6 @@ How to run
 4) Start chatting!  
   
 This code is tested under Mac OS - Mac OS, Window - Mac OS.  
-Python 3.x
+Python 3.x  
+* We recommend you to use earphone.  
+* To take demo video, there is some howling since we used internal speaker and microphone.
